@@ -75,6 +75,29 @@ border:none;
 background:white;
 }
 
+#loading{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:40px;
+height:40px;
+border:4px solid #333;
+border-top:4px solid #fff;
+border-radius:50%;
+animation:spin 1s linear infinite;
+display:none;
+}
+
+#loading.show{
+display:block;
+}
+
+@keyframes spin{
+0%{transform:translate(-50%,-50%) rotate(0deg);}
+100%{transform:translate(-50%,-50%) rotate(360deg);}
+}
+
 </style>
 
 </head>
@@ -99,10 +122,17 @@ background:white;
 
 <iframe id="viewer"></iframe>
 
+<div id="loading"></div>
+
 <script>
 
 const iframe=document.getElementById("viewer")
 const urlbar=document.getElementById("urlbar")
+const loading=document.getElementById("loading")
+
+iframe.onload = () => {
+loading.classList.remove("show")
+}
 
 let historyStack=[]
 let historyIndex=-1
@@ -132,6 +162,8 @@ load(url)
 }
 
 function load(url){
+
+loading.classList.add("show")
 
 iframe.src="/api/proxy?url="+encodeURIComponent(url)
 
