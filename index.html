@@ -1,58 +1,187 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>My Proxy</title>
+
+<title>Google Classroom</title>
+
+<link rel="icon" href="https://ssl.gstatic.com/classroom/favicon.png">
 
 <style>
+
 body{
-  font-family: Arial;
-  text-align:center;
-  margin-top:120px;
+margin:0;
+background:#0a0a0a;
+color:white;
+font-family:Arial;
+overflow:hidden;
 }
 
-input{
-  width:400px;
-  padding:12px;
-  font-size:16px;
+#topbar{
+display:flex;
+align-items:center;
+background:#111;
+padding:8px;
+gap:8px;
 }
 
 button{
-  padding:12px 20px;
-  font-size:16px;
-  cursor:pointer;
+background:#1a1a1a;
+border:none;
+color:white;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
 }
+
+button:hover{
+background:#333;
+}
+
+#urlbar{
+flex:1;
+background:#000;
+border:none;
+color:white;
+padding:8px;
+border-radius:6px;
+font-size:14px;
+outline:none;
+}
+
+#tabs{
+display:flex;
+background:#0f0f0f;
+padding:4px;
+gap:6px;
+}
+
+.tab{
+background:#1a1a1a;
+padding:6px 12px;
+border-radius:6px;
+cursor:pointer;
+font-size:13px;
+}
+
+.tab.active{
+background:#333;
+}
+
+#viewer{
+width:100%;
+height:calc(100vh - 80px);
+border:none;
+background:white;
+}
+
 </style>
 
 </head>
 
 <body>
 
-<h1>Proxy Browser</h1>
+<div id="tabs">
+<div class="tab active">Classroom</div>
+</div>
 
-<input id="url" placeholder="Enter website (example.com)">
-<button onclick="go()">Browse</button>
+<div id="topbar">
+
+<button onclick="back()">⬅</button>
+<button onclick="forward()">➡</button>
+<button onclick="reload()">⟳</button>
+
+<input id="urlbar" placeholder="Search or enter website">
+
+<button onclick="go()">Go</button>
+
+</div>
+
+<iframe id="viewer"></iframe>
 
 <script>
 
-function go(){
+const iframe=document.getElementById("viewer")
+const urlbar=document.getElementById("urlbar")
 
-  let url = document.getElementById("url").value.trim()
+let historyStack=[]
+let historyIndex=-1
 
-  if(!url){
-    alert("Enter a website")
-    return
-  }
+function formatInput(input){
 
-  if(!url.startsWith("http")){
-    url = "https://" + url
-  }
+if(input.includes(".") && !input.includes(" ")){
+if(!input.startsWith("http")){
+return "https://"+input
+}
+return input
+}
 
-  window.location.href =
-  "/api/proxy?url=" + encodeURIComponent(url)
+return "https://www.google.com/search?q="+encodeURIComponent(input)
 
 }
 
-</script>
+function go(){
 
+let value=urlbar.value.trim()
+if(!value)return
+
+let url=formatInput(value)
+
+load(url)
+
+}
+
+function load(url){
+
+iframe.src="/api/proxy?url="+encodeURIComponent(url)
+
+historyStack=historyStack.slice(0,historyIndex+1)
+
+historyStack.push(url)
+historyIndex++
+
+}
+
+function back(){
+
+if(historyIndex>0){
+
+historyIndex--
+
+iframe.src="/api/proxy?url="+encodeURIComponent(historyStack[historyIndex])
+urlbar.value=historyStack[historyIndex]
+
+}
+
+}
+
+function forward(){
+
+if(historyIndex<historyStack.length-1){
+
+historyIndex++
+
+iframe.src="/api/proxy?url="+encodeURIComponent(historyStack[historyIndex])
+urlbar.value=historyStack[historyIndex]
+
+}
+
+}
+
+function reload(){
+
+if(historyIndex>=0){
+iframe.src="/api/proxy?url="+encodeURIComponent(historyStack[historyIndex])
+}
+
+}
+
+urlbar.addEventListener("keydown",(e)=>{
+if(e.key==="Enter")go()
+})
+
+</script>
+<script src="cloak.js"></script>
 </body>
+
 </html>
