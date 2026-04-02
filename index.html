@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Proxy</title>
+
+<style>
+body{
+  font-family: Arial;
+  text-align:center;
+  margin-top:120px;
+}
+
+input{
+  width:400px;
+  padding:12px;
+  font-size:16px;
+}
+
+button{
+  padding:12px 20px;
+  font-size:16px;
+  cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Proxy Browser</h1>
+
+<input id="url" placeholder="Enter website (example.com)">
+<button onclick="go()">Browse</button>
+
+<script>
+
+function go(){
+
+  let url = document.getElementById("url").value.trim()
+
+  if(!url){
+    alert("Enter a website")
+    return
+  }
+
+  if(!url.startsWith("http")){
+    url = "https://" + url
+  }
+
+  window.location.href =
+  "/api/proxy?url=" + encodeURIComponent(url)
+
+}
+
+</script>
+
+</body>
+</html>
