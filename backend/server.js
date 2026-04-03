@@ -22,27 +22,39 @@ app.all("/proxy", async (req, res) => {
       return res.status(400).send("missing url")
     }
 
+    const fetchHeaders = {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5",
+      "Accept-Encoding": "gzip, deflate, br",
+      "DNT": "1",
+      "Connection": "keep-alive",
+      "Upgrade-Insecure-Requests": "1",
+      "Sec-Fetch-Dest": "document",
+      "Sec-Fetch-Mode": "navigate",
+      "Sec-Fetch-Site": "none",
+      "Cache-Control": "max-age=0",
+      "Host": new URL(target).host
+    }
+
     const response = await fetch(target, {
       method: req.method,
-      headers: {
-        ...req.headers,
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.5",
-        "Accept-Encoding": "gzip, deflate, br",
-        "DNT": "1",
-        "Connection": "keep-alive",
-        "Upgrade-Insecure-Requests": "1",
-        "Sec-Fetch-Dest": "document",
-        "Sec-Fetch-Mode": "navigate",
-        "Sec-Fetch-Site": "none",
-        "Cache-Control": "max-age=0",
-        host: new URL(target).host // override host
-      },
-      body: req.method !== 'GET' && req.method !== 'HEAD' ? req : undefined
+      headers: fetchHeaders,
+      redirect: 'manual',
+      compress: true
     })
 
     const contentType = response.headers.get("content-type") || ""
+
+    // if target response is a redirect, convert location to proxy-wrapped location
+    if (response.status >= 300 && response.status < 400) {
+      const location = response.headers.get("location")
+      if (location) {
+        const redirectUrl = new URL(location, target).href
+        res.setHeader("Location", `/proxy?url=${encodeURIComponent(redirectUrl)}`)
+      }
+      return res.status(response.status).send(``)  // no body needed for redirects
+    }
 
     // rewrite html
     if (contentType.includes("text/html")) {
@@ -120,9 +132,8 @@ app.all("/proxy", async (req, res) => {
 
   } catch (err) {
 
-    console.error(err)
-
-    res.status(500).send("proxy error")
+    console.error("Proxy request failed:", err)
+    res.status(500).send(`proxy error: ${err.message}`)
 
   }
 
