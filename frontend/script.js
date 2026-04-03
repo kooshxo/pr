@@ -6,7 +6,7 @@ let historyStack = []
 let historyIndex = -1
 
 // Set your backend URL here when deploying separately
-const backendUrl = 'https://your-backend-url.vercel.app'; // Replace with actual backend URL
+const backendUrl = 'https://pr-bs4c.onrender.com/'; // Replace with actual backend URL
 
 // Register service worker
 if ('serviceWorker' in navigator) {
