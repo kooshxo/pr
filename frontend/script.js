@@ -6,7 +6,7 @@ let historyStack = []
 let historyIndex = -1
 
 // Set your backend URL here when deploying separately
-const backendUrl = 'https://pr-bs4c.onrender.com/'; // Replace with actual backend URL
+const backendUrl = 'https://pr-bs4c.onrender.com'; // Replace with actual backend URL
 
 // Register service worker
 if ('serviceWorker' in navigator) {
@@ -45,7 +45,8 @@ function load(url){
 
 loading.classList.add("show")
 
-frame.src = `${backendUrl}/proxy?url=` + encodeURIComponent(url)
+const cleanedBackend = backendUrl.replace(/\/$/, "")
+frame.src = `${cleanedBackend}/proxy?url=` + encodeURIComponent(url)
 
 historyStack = historyStack.slice(0, historyIndex + 1)
 historyStack.push(url)
