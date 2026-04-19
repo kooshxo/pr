@@ -8,13 +8,25 @@ interface WebViewProps {
   isActive: boolean
 }
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://pr-bs4c.onrender.com'
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''
 
 export function WebView({ tabId, url, isActive }: WebViewProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { updateTab } = useBrowserStore()
+
+  if (!BACKEND_URL) {
+    return (
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background">
+        <AlertCircle className="w-12 h-12 text-destructive mb-4" />
+        <h3 className="text-lg font-semibold text-foreground mb-2">Backend Not Configured</h3>
+        <p className="text-sm text-muted-foreground mb-4 text-center max-w-md">
+          Please set VITE_BACKEND_URL environment variable in Vercel with your backend URL.
+        </p>
+      </div>
+    )
+  }
 
   const proxyUrl = `${BACKEND_URL}/proxy?url=${encodeURIComponent(url)}`
 

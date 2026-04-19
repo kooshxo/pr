@@ -8,7 +8,9 @@ import {
   Waves,
   Keyboard,
   Info,
-  Check
+  Check,
+  Eye,
+  GraduationCap
 } from 'lucide-react'
 import { useTheme } from './ThemeProvider'
 import { useBrowserStore } from '../stores/browserStore'
@@ -21,7 +23,19 @@ interface SettingsDialogProps {
 export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
   const { theme, setTheme } = useTheme()
   const { clearHistory, clearHistoryOlderThan } = useBrowserStore()
-  const [activeTab, setActiveTab] = useState<'appearance' | 'shortcuts' | 'privacy' | 'about'>('appearance')
+  const [activeTab, setActiveTab] = useState<'appearance' | 'shortcuts' | 'privacy' | 'cloaking' | 'about'>('appearance')
+  const [cloakEnabled, setCloakEnabled] = useState(() => localStorage.getItem('cloakEnabled') === 'true')
+  const [disguiseMode, setDisguiseMode] = useState(() => localStorage.getItem('disguiseMode') || 'none')
+
+  const updateCloak = (enabled: boolean) => {
+    setCloakEnabled(enabled)
+    localStorage.setItem('cloakEnabled', enabled.toString())
+  }
+
+  const updateDisguise = (mode: string) => {
+    setDisguiseMode(mode)
+    localStorage.setItem('disguiseMode', mode)
+  }
 
   const themes = [
     { id: 'dark', name: 'Dark', icon: Moon, color: 'bg-neutral-900' },
@@ -83,6 +97,15 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
               >
                 <Moon className="w-4 h-4" />
                 Privacy
+              </button>
+              <button
+                onClick={() => setActiveTab('cloaking')}
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  activeTab === 'cloaking' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Eye className="w-4 h-4" />
+                Cloaking
               </button>
               <button
                 onClick={() => setActiveTab('about')}
@@ -179,6 +202,70 @@ export function SettingsDialog({ isOpen, onClose }: SettingsDialogProps) {
                         <Moon className="w-4 h-4" />
                       </button>
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'cloaking' && (
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-sm font-medium mb-2">About Blank Cloaking</h4>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      When enabled, opening the browser will create a hidden about:blank window and redirect the current tab to a disguise page.
+                    </p>
+                    
+                    <div className="flex items-center justify-between p-3 bg-muted rounded-lg mb-4">
+                      <span className="text-sm">Enable Cloaking</span>
+                      <button
+                        onClick={() => updateCloak(!cloakEnabled)}
+                        className={`relative w-12 h-6 rounded-full transition-colors ${
+                          cloakEnabled ? 'bg-primary' : 'bg-muted-foreground/30'
+                        }`}
+                      >
+                        <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${
+                          cloakEnabled ? 'left-7' : 'left-1'
+                        }`} />
+                      </button>
+                    </div>
+
+                    {cloakEnabled && (
+                      <div className="space-y-3">
+                        <h5 className="text-sm font-medium">Disguise Mode</h5>
+                        <div className="grid gap-2">
+                          <button
+                            onClick={() => updateDisguise('none')}
+                            className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
+                              disguiseMode === 'none'
+                                ? 'border-primary bg-primary/10'
+                                : 'border-border hover:border-muted-foreground'
+                            }`}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-neutral-600 flex items-center justify-center">
+                              <Eye className="w-4 h-4 text-white" />
+                            </div>
+                            <span className="flex-1 text-left">None (Redirects to Google)</span>
+                            {disguiseMode === 'none' && <Check className="w-4 h-4 text-primary" />}
+                          </button>
+                          <button
+                            onClick={() => updateDisguise('classroom')}
+                            className={`flex items-center gap-3 p-3 rounded-lg border-2 transition-all ${
+                              disguiseMode === 'classroom'
+                                ? 'border-primary bg-primary/10'
+                                : 'border-border hover:border-muted-foreground'
+                            }`}
+                          >
+                            <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
+                              <GraduationCap className="w-4 h-4 text-white" />
+                            </div>
+                            <span className="flex-1 text-left">Google Classroom</span>
+                            {disguiseMode === 'classroom' && <Check className="w-4 h-4 text-primary" />}
+                          </button>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Refresh the page after enabling cloaking for it to take effect.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
