@@ -1,0 +1,13 @@
+run = "cd backend && npm start"
+entrypoint = "backend/server.js"
+
+[env]
+PORT = "3000"
+NODE_ENV = "production"
+
+[nix]
+channel = "stable-22_11"
+
+[deployment]
+run = "cd backend && npm start"
+deploymentTarget = "cloudrun"
