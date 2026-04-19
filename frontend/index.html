@@ -11,39 +11,6 @@
   <style>
     body { margin: 0; background: #0b0b0b; }
   </style>
-  <!-- Force redeploy -->
-  <script>
-    // Cloaking functionality - About Blank & Google Classroom
-    (function() {
-      const cloakEnabled = localStorage.getItem('cloakEnabled') === 'true';
-      const disguiseMode = localStorage.getItem('disguiseMode') || 'none';
-      
-      if (cloakEnabled) {
-        const win = window.open('about:blank', '_blank');
-        if (win) {
-          const title = disguiseMode === 'classroom' ? 'Google Classroom' : 'Google';
-          const favicon = disguiseMode === 'classroom' ? 'https://ssl.gstatic.com/classroom/favicon.ico' : 'https://www.google.com/favicon.ico';
-          const currentUrl = window.location.href;
-          
-          const html = '<!DOCTYPE html>' +
-            '<html>' +
-            '<head>' +
-            '<title>' + title + '</title>' +
-            '<link rel="icon" type="image/x-icon" href="' + favicon + '">' +
-            '<style>body{margin:0;overflow:hidden;}iframe{width:100vw;height:100vh;border:none;}</style>' +
-            '</head>' +
-            '<body>' +
-            '<iframe src="' + currentUrl + '" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>' +
-            '</body>' +
-            '</html>';
-          
-          win.document.write(html);
-          win.document.close();
-          window.location.href = disguiseMode === 'classroom' ? 'https://classroom.google.com' : 'https://www.google.com';
-        }
-      }
-    })();
-  </script>
 </head>
 <body>
   <div id="root"></div>
