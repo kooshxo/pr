@@ -24,31 +24,35 @@ A feature-rich, modern web proxy browser built with React, TypeScript, and Expre
 
 ### Backend - Actually Free Options (No Credit Card)
 
-#### Option 1: Replit (Always Free) ← RECOMMENDED
-1. Go to https://replit.com
-2. Click "Create" → "Import from GitHub"
-3. Select your `kooshxo/pr` repo
-4. Replit auto-detects the `.replit` file
-5. Click "Run" (runs `cd backend && npm start`)
-6. Once running, click "Share" for public URL
-7. Set `ALLOWED_ORIGINS` secret in Replit (your Vercel URL)
-8. **Actually free, no payment required**
-
-#### Option 2: Cyclic.sh (Free Forever)
+#### Option 1: Cyclic.sh (Free Forever) ← BEST OPTION
 1. Go to https://cyclic.sh
 2. Sign in with GitHub
 3. "Deploy" → Select your repo
 4. Set root: `/backend`
 5. Add env var: `ALLOWED_ORIGINS` (your Vercel frontend URL)
-6. Deploy - no payment info needed
+6. Deploy - **no payment info needed, stays awake**
 
-#### Option 3: Fly.io (Free Allowance - requires CC)
-```bash
-cd backend
-fly launch --name proxibrowse-backend
-fly deploy
-```
-Free tier: 3 shared-cpu-1x VMs, stays running
+#### Option 2: Glitch (Free Forever)
+1. Go to https://glitch.com
+2. "New Project" → "Import from GitHub"
+3. Paste your repo URL: `https://github.com/kooshxo/pr`
+4. In terminal: `cd backend && npm install`
+5. Set `.env` file: `ALLOWED_ORIGINS=your-vercel-url`
+6. **Free but sleeps after 5 min (wakes on request)**
+
+#### Option 3: Adaptable.io (Free Tier)
+1. Go to https://adaptable.io
+2. "Deploy Now" → GitHub
+3. Select repo, choose `backend` folder
+4. Set Node.js start command: `npm start`
+5. Add env vars, deploy
+6. **Free, no credit card**
+
+#### Option 4: Replit (Always Free)
+1. https://replit.com → Import from GitHub
+2. Your URL: `https://pr--duanesalt9.replit.app`
+3. Sleeps after 30 min inactivity
+4. **Actually free but annoying sleep timeout**
 
 ## Quick Start
 
