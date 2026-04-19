@@ -16,41 +16,43 @@ A feature-rich, modern web proxy browser built with React, TypeScript, and Expre
 
 ### Frontend to Vercel (Free)
 1. Push code to GitHub
-2. Import project in Vercel
-3. Set framework: Vite
-4. Build command: npm run build
-5. Output: dist
-6. Set VITE_BACKEND_URL env var
+2. Import project in Vercel (vercel.com)
+3. Select "Vite" as framework
+4. Build command: `npm run build`
+5. Output directory: `dist`
+6. Add env var: `VITE_BACKEND_URL` (your backend URL)
 
-### Backend - FREE Options (No Payment Required)
+### Backend - Actually Free Options (No Credit Card)
 
-#### Option 1: Railway (Free Tier)
-1. Go to https://railway.app
-2. "New Project" → "Deploy from GitHub repo"
-3. Select your repo
-4. Railway auto-detects Node.js
-5. Add environment variable: `ALLOWED_ORIGINS`
-6. Deploy - free tier includes $5 credit monthly
-
-#### Option 2: Cyclic (Free Forever)
+#### Option 1: Cyclic.sh (Free Forever)
 1. Go to https://cyclic.sh
-2. Connect GitHub repo
-3. Cyclic auto-deploys from `backend/` folder
-4. Add env var: `ALLOWED_ORIGINS`
-5. No credit card required
+2. Sign in with GitHub
+3. "Deploy" → Select your repo
+4. Set root: `/backend`
+5. Add env var: `ALLOWED_ORIGINS` (your Vercel frontend URL)
+6. Deploy - no payment info needed
+
+#### Option 2: Koyeb (Free Tier)
+1. Go to https://koyeb.com
+2. GitHub → Deploy repository
+3. Select `backend` folder
+4. Build: `npm install`
+5. Run: `npm start`
+6. Add env vars as needed
 
 #### Option 3: Fly.io (Free Allowance)
-1. Install flyctl: `powershell -Command "iwr https://fly.io/install.ps1 -useb | iex"`
-2. `cd backend`
-3. `fly launch` (creates fly.toml)
-4. `fly deploy`
-5. Free tier: 3 shared-cpu-1x VMs, 3GB persistent storage
+```bash
+cd backend
+fly launch --name proxibrowse-backend
+fly deploy
+```
+Free tier: 3 shared-cpu-1x VMs, stays running
 
 #### Option 4: Replit (Always Free)
-1. Import GitHub repo to Replit
+1. https://replit.com → Import from GitHub
 2. Set run command: `cd backend && npm start`
-3. Get public URL from "Share" button
-4. Limited but works for testing
+3. Click "Run" → "Share" for public URL
+4. Limited resources but works for testing
 
 ## Quick Start
 
