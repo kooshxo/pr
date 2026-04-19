@@ -24,7 +24,15 @@ A feature-rich, modern web proxy browser built with React, TypeScript, and Expre
 
 ### Backend - Actually Free Options (No Credit Card)
 
-#### Option 1: Cyclic.sh (Free Forever) ← BEST OPTION
+#### Option 1: AWS Elastic Beanstalk (Free Tier - 12 Months)
+1. Go to https://aws.amazon.com/elasticbeanstalk
+2. "Create Application" → Node.js platform
+3. Upload your code (zip the `backend` folder)
+4. Set environment variable: `ALLOWED_ORIGINS` (your Vercel URL)
+5. Deploy - **t2.micro is free for 12 months, then always free**
+6. Get your `.elasticbeanstalk.com` URL
+
+#### Option 2: Cyclic.sh (Free Forever)
 1. Go to https://cyclic.sh
 2. Sign in with GitHub
 3. "Deploy" → Select your repo
@@ -32,7 +40,7 @@ A feature-rich, modern web proxy browser built with React, TypeScript, and Expre
 5. Add env var: `ALLOWED_ORIGINS` (your Vercel frontend URL)
 6. Deploy - **no payment info needed, stays awake**
 
-#### Option 2: Glitch (Free Forever)
+#### Option 3: Glitch (Free Forever)
 1. Go to https://glitch.com
 2. "New Project" → "Import from GitHub"
 3. Paste your repo URL: `https://github.com/kooshxo/pr`
@@ -40,19 +48,13 @@ A feature-rich, modern web proxy browser built with React, TypeScript, and Expre
 5. Set `.env` file: `ALLOWED_ORIGINS=your-vercel-url`
 6. **Free but sleeps after 5 min (wakes on request)**
 
-#### Option 3: Adaptable.io (Free Tier)
+#### Option 4: Adaptable.io (Free Tier)
 1. Go to https://adaptable.io
 2. "Deploy Now" → GitHub
 3. Select repo, choose `backend` folder
 4. Set Node.js start command: `npm start`
 5. Add env vars, deploy
 6. **Free, no credit card**
-
-#### Option 4: Replit (Always Free)
-1. https://replit.com → Import from GitHub
-2. Your URL: `https://pr--duanesalt9.replit.app`
-3. Sleeps after 30 min inactivity
-4. **Actually free but annoying sleep timeout**
 
 ## Quick Start
 
