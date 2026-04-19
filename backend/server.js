@@ -12,6 +12,9 @@ const __dirname = path.dirname(__filename)
 
 const app = express()
 
+// Trust proxy (required for express-rate-limit behind reverse proxy like Replit)
+app.set('trust proxy', 1)
+
 // Body parsing for POST requests
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
