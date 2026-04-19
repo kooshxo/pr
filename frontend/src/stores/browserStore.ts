@@ -60,7 +60,8 @@ interface BrowserState {
 }
 
 const formatUrl = (input: string): string => {
-  const trimmed = input.trim()
+  const str = typeof input === 'string' ? input : String(input || '')
+  const trimmed = str.trim()
   if (!trimmed) return 'https://duckduckgo.com'
   
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {

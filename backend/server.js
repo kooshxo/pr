@@ -392,7 +392,7 @@ app.all("/proxy", async (req, res) => {
       setCachedResponse(target, buffer, contentType)
     }
 
-    // Forward response headers
+    // Forward response headers (excluding security headers that block iframes)
     const forwardResponseHeaders = ['content-type', 'cache-control', 'expires', 'etag', 'last-modified', 'set-cookie']
     forwardResponseHeaders.forEach(header => {
       const value = response.headers.get(header)
@@ -410,6 +410,10 @@ app.all("/proxy", async (req, res) => {
         }
       }
     })
+    
+    // Explicitly allow iframe embedding
+    res.setHeader('X-Frame-Options', 'ALLOWALL')
+    res.removeHeader('Content-Security-Policy')
 
     res.setHeader("X-Cache", "MISS")
     res.send(buffer)
