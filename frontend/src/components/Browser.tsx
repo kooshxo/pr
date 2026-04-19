@@ -137,7 +137,6 @@ export function Browser() {
               tabId={tab.id}
               url={tab.url}
               isActive={tab.id === activeTab}
-              onNavigate={(url) => navigate(tab.id, url)}
             />
           ))}
         </div>
