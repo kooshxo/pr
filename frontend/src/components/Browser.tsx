@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { TabBar } from './TabBar'
 import { AddressBar } from './AddressBar'
 import { Toolbar } from './Toolbar'
@@ -16,7 +16,6 @@ export function Browser() {
   const [showHistory, setShowHistory] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const { tabs, activeTab, addTab, closeTab, setActiveTab, navigate, goBack, goForward, reload } = useBrowserStore()
-  const webViewRef = useRef<HTMLIFrameElement>(null)
 
   // Keyboard shortcuts
   useHotkeys('ctrl+t, cmd+t', (e) => {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, History, Search, Trash2, ExternalLink, Clock } from 'lucide-react'
+import { X, History, Search, Clock } from 'lucide-react'
 import { useBrowserStore, HistoryItem } from '../stores/browserStore'
 import Fuse from 'fuse.js'
 
@@ -10,7 +10,6 @@ interface HistoryDialogProps {
 
 export function HistoryDialog({ isOpen, onClose }: HistoryDialogProps) {
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
   
   const { history, clearHistory, clearHistoryOlderThan, addTab } = useBrowserStore()
 
@@ -20,11 +19,11 @@ export function HistoryDialog({ isOpen, onClose }: HistoryDialogProps) {
   })
 
   const filteredHistory = searchQuery
-    ? fuse.search(searchQuery).map(r => r.item)
+    ? fuse.search(searchQuery).map((r: { item: HistoryItem }) => r.item)
     : history
 
   // Group by date
-  const groupedHistory = filteredHistory.reduce((groups, item) => {
+  const groupedHistory = filteredHistory.reduce((groups: Record<string, HistoryItem[]>, item: HistoryItem) => {
     const date = new Date(item.visitedAt).toLocaleDateString()
     if (!groups[date]) groups[date] = []
     groups[date].push(item)
@@ -34,21 +33,6 @@ export function HistoryDialog({ isOpen, onClose }: HistoryDialogProps) {
   const handleOpenUrl = (url: string) => {
     addTab(url)
     onClose()
-  }
-
-  const toggleSelection = (id: string) => {
-    const newSelected = new Set(selectedItems)
-    if (newSelected.has(id)) {
-      newSelected.delete(id)
-    } else {
-      newSelected.add(id)
-    }
-    setSelectedItems(newSelected)
-  }
-
-  const handleDeleteSelected = () => {
-    // In a real implementation, you'd remove specific items
-    setSelectedItems(new Set())
   }
 
   if (!isOpen) return null
@@ -114,15 +98,9 @@ export function HistoryDialog({ isOpen, onClose }: HistoryDialogProps) {
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted group"
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted group cursor-pointer"
+                    onClick={() => handleOpenUrl(item.url)}
                   >
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has(item.id)}
-                      onChange={() => toggleSelection(item.id)}
-                      className="w-4 h-4 rounded border-border"
-                    />
-                    
                     {item.favicon ? (
                       <img src={item.favicon} alt="" className="w-5 h-5 rounded" />
                     ) : (
@@ -137,15 +115,6 @@ export function HistoryDialog({ isOpen, onClose }: HistoryDialogProps) {
                     <span className="text-xs text-muted-foreground">
                       {new Date(item.visitedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
-                    
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100">
-                      <button
-                        onClick={() => handleOpenUrl(item.url)}
-                        className="p-2 rounded-lg hover:bg-primary/20"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
-                    </div>
                   </div>
                 ))}
               </div>

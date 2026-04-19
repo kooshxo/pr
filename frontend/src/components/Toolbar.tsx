@@ -2,8 +2,6 @@ import {
   ArrowLeft, 
   ArrowRight, 
   RotateCw, 
-  Home, 
-  Menu, 
   Bookmark, 
   History, 
   Settings,

@@ -13,7 +13,7 @@ export function BookmarksDialog({ isOpen, onClose }: BookmarksDialogProps) {
   const [newBookmark, setNewBookmark] = useState({ url: '', title: '', folder: 'Favorites' })
   const [showAddForm, setShowAddForm] = useState(false)
   
-  const { bookmarks, folders, addBookmark, removeBookmark, addFolder, addTab } = useBrowserStore()
+  const { bookmarks, folders, addBookmark, removeBookmark, addTab } = useBrowserStore()
 
   const fuse = new Fuse(bookmarks, {
     keys: ['title', 'url'],

@@ -6,40 +6,11 @@ interface WebViewProps {
   tabId: string
   url: string
   isActive: boolean
-  onNavigate: (url: string) => void
 }
 
-// Session/cookie management configuration
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://pr-bs4c.onrender.com'
 
-// Cookie jar to persist cookies across requests (session-only)
-const cookieJar = new Map<string, string[]>()
-
-function getCookieKey(url: string): string {
-  try {
-    const urlObj = new URL(url)
-    return urlObj.hostname
-  } catch {
-    return 'default'
-  }
-}
-
-function storeCookies(url: string, cookies: string[]) {
-  const key = getCookieKey(url)
-  const existing = cookieJar.get(key) || []
-  cookieJar.set(key, [...existing, ...cookies])
-}
-
-function getCookiesForUrl(url: string): string {
-  const key = getCookieKey(url)
-  const cookies = cookieJar.get(key)
-  return cookies ? cookies.join('; ') : ''
-}
-
-// Note: Modern browsers restrict iframe cookie access. 
-// The backend proxy handles Set-Cookie forwarding for proper auth flows.
-
-export function WebView({ tabId, url, isActive, onNavigate }: WebViewProps) {
+export function WebView({ tabId, url, isActive }: WebViewProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)

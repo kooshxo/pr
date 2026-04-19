@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X, Bookmark, History, Folder, Plus, Trash2, ExternalLink } from 'lucide-react'
+import { X, Bookmark, History, Folder, Plus, Trash2 } from 'lucide-react'
 import { useBrowserStore } from '../stores/browserStore'
 
 interface SidebarProps {
@@ -18,8 +18,6 @@ export function Sidebar({ onClose }: SidebarProps) {
     removeBookmark, 
     removeFolder, 
     addFolder,
-    navigate,
-    setActiveTab: setActiveBrowserTab,
     addTab
   } = useBrowserStore()
 
